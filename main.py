@@ -32,9 +32,10 @@ class EntityObject(GameObject):
 		self.posY += dY
 
 
-class Player(MoveableObject):
-"""Player object. Might add another Entity class that this would inherit from."""
-	pass
+class Player(EntityObject):
+"""Player object. Inherits from Entity."""
+	def __init__(self):
+		super().__init__()
 
 
 class Layer():
@@ -50,7 +51,7 @@ class EnvironmentLayer(BaseState):
 		super().__init__(sizeX, sizeY):
 			self.background = [[None for x in range(self.sizeX)] for y in range(self.sizeY)]
 
-			self.fillBackground(Tile('#'))
+			self.fillBackground(Tile('0'))
 
 	def fillBackground(tile):
 		for y in self.background:
@@ -64,12 +65,29 @@ class EntityLayer(BaseState):
 		super().__init__(sizeX, sizeY)
 
 	def update():
-		# for each object in self.contents, read their positions. If changed, update contens accordingly.
+		# for each object in self.contents, read their positions. If changed, update contents accordingly.
 
 
-def mainLoop():
+def start():
+	environment = EnvironmentLayer(curses.COLS, curses.LINES)
+	entities = EntityLayer(curses.COLS, curses.LINES)
 
-	mainLoop()
+	mainLoop(environment, entities)
+
+
+def handleInput():
+	pass
+
+
+def handleNetwork():
+	pass
+
+
+def mainLoop(env, ent):
+	handleInput()
+	handleNetwork()
+	ent.update()
+	mainLoop(env, ent)
 
 
 def main(stdscr):
@@ -79,6 +97,8 @@ def main(stdscr):
 
 	stdscr.addstr(args.test)
 	stdscr.getch()
+
+	start()
 
 if __name__ == "__main__":
 	curses.wrapper(main) # Curses initialization
