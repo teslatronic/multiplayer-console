@@ -45,7 +45,7 @@ class Layer():
 		self.sizeY = sizeY
 		self.contents = [[None for x in range(sizeX)] for y in range(sizeY)] # Lists comprehensions are yummy. :3
 
-class EnvironmentLayer(BaseState):
+class Environment(BaseState):
 """Stores  all environment objects in the game, plus an array with a background."""
 	def __init__(self, sizeX, sizeY):
 		super().__init__(sizeX, sizeY):
@@ -59,18 +59,9 @@ class EnvironmentLayer(BaseState):
 				self.background[y][x] = tile
 
 
-class EntityLayer(BaseState):
-"""Stores all Entity objects, and contains an update() function to keep track of their positions."""
-	def __init__(self, sizeX, sizeY):
-		super().__init__(sizeX, sizeY)
-
-	def update():
-		# for each object in self.contents, read their positions. If changed, update contents accordingly.
-
-
 def start():
-	environment = EnvironmentLayer(curses.COLS, curses.LINES)
-	entities = EntityLayer(curses.COLS, curses.LINES)
+	environment = Environment(curses.COLS, curses.LINES)
+	entities = []
 
 	mainLoop(environment, entities)
 
