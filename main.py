@@ -38,47 +38,52 @@ class Player(EntityObject):
 		super().__init__()
 
 
-class Layer():
-"""Each layer contains a 2D-array."""
-	def __init__(self, sizeX, sizeY):
-		self.sizeX = sizeX
-		self.sizeY = sizeY
-		self.contents = [[None for x in range(sizeX)] for y in range(sizeY)] # Lists comprehensions are yummy. :3
-
-class Environment(BaseState):
-"""Stores  all environment objects in the game, plus an array with a background."""
+class Environment():
+"""Stores  all environment objects in the game, plus a list with a background."""
 	def __init__(self, sizeX, sizeY):
 		super().__init__(sizeX, sizeY):
-			self.background = [[None for x in range(self.sizeX)] for y in range(self.sizeY)]
+			self.sizeX = sizeX
+			self.sizeY = sizeY
+			self.contents = 2DList(sizeX, sizeY)
+			self.background = 2DList(sizeX, sizeY)
 
-			self.fillBackground(Tile('0'))
-
-	def fillBackground(tile):
-		for y in self.background:
-			for x in self.background[y]:
-				self.background[y][x] = tile
+			self.background.fill('0')
 
 
-def start():
+class 2DList():
+	def __init__(self, sX, sY):
+		self.list = [[None for x in range(sX)] for y in range(sY)]
+		self.size = (sX, sY)
+
+	def fill(obj):
+		for y in self.list:
+			for x in self.list[y]:
+				self.list[y][x] = obj
+
+	def set(x, y, obj):
+		self.list[y][x] = obj
+
+
+def handleInput(ent):
+	pass
+
+
+def handleDraw(ent):
+	screen = 2DList(curses.COLS, curses.LINES)
+
+
+def mainLoop(env, ent):
+	running = True
+	while running:
+		handleInput(ent)
+		handleDraw(ent)
+
+		
+def startGame():
 	environment = Environment(curses.COLS, curses.LINES)
 	entities = []
 
 	mainLoop(environment, entities)
-
-
-def handleInput():
-	pass
-
-
-def handleNetwork():
-	pass
-
-
-def mainLoop(env, ent):
-	handleInput()
-	handleNetwork()
-	ent.update()
-	mainLoop(env, ent)
 
 
 def main(stdscr):
@@ -89,7 +94,7 @@ def main(stdscr):
 	stdscr.addstr(args.test)
 	stdscr.getch()
 
-	start()
+	startGame()
 
 if __name__ == "__main__":
 	curses.wrapper(main) # Curses initialization
